@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: ajouway
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ajou_way
+    username: admin
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+    org.springframework.web: debug
+    org.springdoc: debug
+    org.springdoc.api: debug
+    org.springdoc.webmvc.api: debug
+    org.springdoc.core: debug
+
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: 947997246064-fi5aft8oimhpc9enujjhbkltp823n0v1.apps.googleusercontent.com
+#            client-secret: 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
+#            scope:
+#              - email
+#              - profile
+
+#jwt:
+#  access-secret: asdasdsadwqewqeqwrwqfefafafasdsda
+#  refresh-secret: ejkjsshhmzsdasdsfewyfqebwufnadsaojls
