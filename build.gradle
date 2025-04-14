@@ -36,6 +36,7 @@ dependencies {
     // db
     implementation 'org.postgresql:postgresql'
     implementation 'com.vladmihalcea:hibernate-types-60:2.21.1'
+    runtimeOnly 'com.h2database:h2'
 
     // hibernate-spatial
     implementation 'org.hibernate:hibernate-spatial:6.6.5.Final'
