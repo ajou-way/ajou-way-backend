@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: ajouway
+
+  profiles:
+    default: local
+    group:
+      test: h2-test
+      dev: postgresql-dev
+
+  config:
+    import: "application-db.yml"
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
