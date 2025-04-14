@@ -84,6 +84,7 @@ jobs:
             cd /home/ec2-user/workspace
             rm .env
             touch .env
+            echo "SPRING_JPA_DDL_AUTO=${{ secrets.SPRING_JPA_DDL_AUTO }}" >> .env
             echo "POSTGRESQL_USER=admin" >> .env
             echo "POSTGRESQL_PASSWORD=${{ secrets.POSTGRESQL_PASSWORD }}" >> .env
             echo "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/ajou_way" >> .env
@@ -92,4 +93,5 @@ jobs:
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
             echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             docker-compose down -v
+            docker rmi ajouway-dev:latest
             docker-compose up -d
