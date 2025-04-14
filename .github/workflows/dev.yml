@@ -93,5 +93,5 @@ jobs:
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
             echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             docker-compose down -v
-            docker images -q ajouway-dev:latest | grep -q . && docker rmi ajouway-dev:latest
+            docker images -q ajouwaydev/ajouway-dev:latest | grep -q . && docker rmi ajouwaydev/ajouway-dev:latest
             docker-compose up -d
