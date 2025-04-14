@@ -81,7 +81,7 @@ jobs:
           key: ${{ secrets.DEV_AWS_EC2_SSH_KEY }}
           port: 22
           script: |
-            cd /home/ubuntu/workspace
+            cd /home/ec2-user/workspace
             rm .env
             touch .env
             echo "POSTGRESQL_USER=admin" >> .env
