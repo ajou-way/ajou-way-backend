@@ -81,7 +81,7 @@ jobs:
           key: ${{ secrets.DEV_AWS_EC2_SSH_KEY }}
           port: 22
           script: |
-            cd /home/ec2-user/workspace
+            cd /home/ubuntu/workspace
             [ -f .env ] && rm .env
             touch .env
             echo "SPRING_JPA_DDL_AUTO=${{ secrets.SPRING_JPA_DDL_AUTO }}" >> .env
