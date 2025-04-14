@@ -12,7 +12,7 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${SPRING_JPA_DDL_AUTO:update}
     show-sql: true
     defer-datasource-initialization: true
 
@@ -24,11 +24,6 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
-    org.springframework.web: debug
-    org.springdoc: debug
-    org.springdoc.api: debug
-    org.springdoc.webmvc.api: debug
-    org.springdoc.core: debug
 
 #  security:
 #    oauth2:
