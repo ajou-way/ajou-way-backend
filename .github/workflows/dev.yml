@@ -56,7 +56,7 @@ jobs:
         run: ./gradlew clean build
 
       - name: Build app Docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ajouway-dev:latest
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ajouway-dev:latest .
 
       - name: login to docker hub
         uses: docker/login-action@v2
