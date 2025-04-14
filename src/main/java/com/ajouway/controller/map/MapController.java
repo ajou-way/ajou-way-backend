@@ -7,6 +7,7 @@ import com.ajouway.domain.service.map.MapService;
 import com.ajouway.dto.map.BuildingMarkerSimpleResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +38,7 @@ public class MapController {
         return mapService.getBuildingMarker(buildingId);
     }
 
+    @CrossOrigin("*")
     @GetMapping("/buildings")
     public ListWrapperResponse<BuildingMarkerSimpleResponse> getBuildingMarkers(){
         return ListWrapperResponse.of(mapService.getBuildingMarkers());
