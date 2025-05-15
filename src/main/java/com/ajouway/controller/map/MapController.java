@@ -1,18 +1,11 @@
 package com.ajouway.controller.map;
 
 import com.ajouway.dto.ListWrapperResponse;
-import com.ajouway.dto.map.BuildingAmenityAddRequest;
-import com.ajouway.dto.map.BuildingResponse;
+import com.ajouway.dto.map.response.BuildingResponse;
 import com.ajouway.domain.service.map.MapService;
-import com.ajouway.dto.map.BuildingSimpleResponse;
-import jakarta.validation.Valid;
+import com.ajouway.dto.map.response.BuildingSimpleResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +31,7 @@ public class MapController {
     }
 
     @GetMapping("/buildings")
-    public ListWrapperResponse<BuildingSimpleResponse> getBuildingMarkers(){
+    public ListWrapperResponse<BuildingSimpleResponse> getBuildingMarkers() {
         return ListWrapperResponse.of(mapService.getBuildingMarkers());
     }
 }

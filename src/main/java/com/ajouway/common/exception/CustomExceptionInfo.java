@@ -17,7 +17,10 @@ public enum CustomExceptionInfo {
     //404
     NOT_FOUND_USER(404, "user not found", 404001),
     BUILDING_NOT_FOUND(404, "builing not found", 404002),
-    AMENITY_NOT_FOUND(404, "amenity not found", 404003);
+    AMENITY_NOT_FOUND(404, "amenity not found", 404003),
+
+    //500
+    ROUTE_ERROR(500, "route error", 500001);
 
     private final int statusCode;
     private final String message;

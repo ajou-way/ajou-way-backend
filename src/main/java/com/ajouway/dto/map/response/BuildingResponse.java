@@ -1,33 +1,32 @@
-package com.ajouway.dto.map;
+package com.ajouway.dto.map.response;
 
-import com.ajouway.domain.enums.AmenityInfoType;
-import com.ajouway.dto.GeoJsonPoint;
-import com.ajouway.storage.entity.map.AmenityInfo;
 import com.ajouway.storage.entity.map.Building;
+import com.ajouway.dto.GeoJsonPoint;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
 
 @Builder
-public record BuildingSimpleResponse(
+public record BuildingResponse(
         Long id,
         String name,
         GeoJsonPoint geometry,
         String remarks,
         String imgUrl,
-        List<AmenityInfoType> amenityInfoTypes
-) {
-    public static BuildingSimpleResponse fromEntity(final Building building) {
-        return BuildingSimpleResponse.builder()
+        List<AmenityInfoResponse> amenityInfos
+){
+    public static BuildingResponse fromEntity(final Building building){
+        return BuildingResponse.builder()
                 .id(building.getId())
                 .name(building.getName())
                 .geometry(GeoJsonPoint.converter(building.getGeometry()))
                 .remarks(building.getRemarks())
                 .imgUrl(building.getImgUrl())
-                .amenityInfoTypes(building.getAmenityInfos()
+                .amenityInfos(building.getAmenityInfos()
                         .stream()
-                        .map(AmenityInfo::getAmenityInfoType)
+                        .map(AmenityInfoResponse::fromEntity)
                         .collect(Collectors.toList()))
                 .build();
+
     }
 }

@@ -1,8 +1,8 @@
 package com.ajouway.controller.admin;
 
 import com.ajouway.domain.service.map.MapService;
-import com.ajouway.dto.map.AmenityInfoResponse;
-import com.ajouway.dto.map.BuildingAmenityAddRequest;
+import com.ajouway.dto.map.response.AmenityInfoResponse;
+import com.ajouway.dto.map.request.BuildingAmenityAddRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
