@@ -1,42 +1,17 @@
 spring:
   config:
     activate:
-      on-profile: h2-test
-
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-
-  sql:
-    init:
-      mode: never
----
-
-spring:
-  config:
-    activate:
       on-profile: postgresql-dev
-
   datasource:
     url: jdbc:postgresql://localhost:5432/ajou_way
     username: admin
     password: admin
     driver-class-name: org.postgresql.Driver
-
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: ${SPRING_JPA_DDL_AUTO:update}
+      ddl-auto: ${SPRING_JPA_DDL_AUTO:create}
     show-sql: true
     defer-datasource-initialization: true
 
