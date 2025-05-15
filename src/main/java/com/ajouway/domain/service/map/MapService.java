@@ -2,50 +2,55 @@ package com.ajouway.domain.service.map;
 
 import com.ajouway.common.exception.CustomException;
 import com.ajouway.common.exception.CustomExceptionInfo;
+import com.ajouway.domain.repository.AmenityInfoRepository;
+import com.ajouway.domain.repository.BuildingRepository;
+import com.ajouway.dto.map.AmenityInfoResponse;
 import com.ajouway.dto.map.BuildingAmenityAddRequest;
-import com.ajouway.dto.map.BuildingMarkerSimpleResponse;
-import com.ajouway.infra.persistence.entity.map.BuildingMarker;
-import com.ajouway.dto.map.BuildingMarkerResponse;
-import com.ajouway.infra.persistence.repository.map.AmenityInfoJpaRepository;
-import com.ajouway.infra.persistence.repository.map.BuildingMarkerJpaRepository;
-import java.util.ArrayList;
+import com.ajouway.dto.map.BuildingSimpleResponse;
+import com.ajouway.storage.entity.map.AmenityInfo;
+import com.ajouway.storage.entity.map.Building;
+import com.ajouway.dto.map.BuildingResponse;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class MapService {
 
-    private final BuildingMarkerJpaRepository buildingMarkerRepository;
-    private final AmenityInfoJpaRepository amenityInfoRepository;
+    private final BuildingRepository buildingRepository;
+    private final AmenityInfoRepository amenityInfoRepository;
 
-    @Transactional(readOnly = true)
-    public BuildingMarkerResponse getBuildingMarker(final Long buildingId) {
-        final BuildingMarker buildingMarker = getBuildingMarkerById(buildingId);
-        return BuildingMarkerResponse.fromEntity(buildingMarker);
+    public BuildingResponse getBuildingMarker(final Long buildingId) {
+        Building buildingMarker = buildingRepository.getById(buildingId);
+        return BuildingResponse.fromEntity(buildingMarker);
     }
 
-    @Transactional(readOnly = true)
-    public List<BuildingMarkerSimpleResponse> getBuildingMarkers(){
-        final List<BuildingMarker> buildingMarkers = new ArrayList<>();
-        return buildingMarkerRepository.findAll()
+    public List<BuildingSimpleResponse> getBuildingMarkers() {
+        return buildingRepository.findAll()
                 .stream()
-                .map(BuildingMarkerSimpleResponse::fromEntity)
+                .map(BuildingSimpleResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    public void addAmenityForBuilding(final BuildingAmenityAddRequest request){
-        final BuildingMarker buildingMarker = getBuildingMarkerById(request.buildingId());
-        amenityInfoRepository.save(request.toEntity(buildingMarker));
+    @Transactional
+    public AmenityInfoResponse addAmenityForBuilding(final Long buildingId, final BuildingAmenityAddRequest request) {
+        if (amenityInfoRepository.existsByBuildingIdAndAmenityInfoType(buildingId, request.amenityInfoType())) {
+            throw new CustomException(CustomExceptionInfo.ALREADY_EXIST_AMENITY_INFO_TYPE);
+        }
+        Building buildingMarker = buildingRepository.getById(buildingId);
+        AmenityInfo amenityInfo = amenityInfoRepository.save(request.toEntity(buildingMarker));
+        return AmenityInfoResponse.fromEntity(amenityInfo);
     }
 
-    @Transactional(readOnly = true)
-    public BuildingMarker getBuildingMarkerById(final Long id){
-        return buildingMarkerRepository.findById(id)
-                .orElseThrow(()->new CustomException(CustomExceptionInfo.BUILDING_NOT_FOUND));
+    @Transactional
+    public AmenityInfoResponse updateAmenityForBuilding(final Long amenityId, final BuildingAmenityAddRequest request) {
+        AmenityInfo amenityInfo = amenityInfoRepository.getById(amenityId);
+        return AmenityInfoResponse.fromEntity(amenityInfo.update(request.contents()));
     }
 }

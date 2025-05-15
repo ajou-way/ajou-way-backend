@@ -1,4 +1,4 @@
-package com.ajouway.infra.persistence.entity;
+package com.ajouway.storage.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

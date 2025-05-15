@@ -3,13 +3,15 @@ spring:
     name: ajouway
 
   profiles:
-    default: dev
     group:
       test: h2-test
       dev: postgresql-dev
 
   config:
-    import: "application-db.yml"
+    import: "application-dev.yml,application-test.yml"
+
+server:
+  port: 8080
 
 logging:
   level:
