@@ -2,9 +2,9 @@ package com.ajouway.controller.map;
 
 import com.ajouway.dto.ListWrapperResponse;
 import com.ajouway.dto.map.BuildingAmenityAddRequest;
-import com.ajouway.dto.map.BuildingMarkerResponse;
+import com.ajouway.dto.map.BuildingResponse;
 import com.ajouway.domain.service.map.MapService;
-import com.ajouway.dto.map.BuildingMarkerSimpleResponse;
+import com.ajouway.dto.map.BuildingSimpleResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/maps")
+@RequestMapping("/api/maps")
 public class MapController {
 
     private final MapService mapService;
 
-    //배리어프리
+//    todo 배리어프리
 //    @GetMapping
 //    public ListWrapperResponse<FacilityMarkerResponse> getFacilityMarkers() {
 //        return ListWrapperResponse.of(markerService.getFacilityMarkers());
@@ -34,18 +34,13 @@ public class MapController {
 //    }
 
     @GetMapping("/buildings/{buildingId}")
-    public BuildingMarkerResponse getBuildingMarker(@PathVariable("buildingId") Long buildingId) {
+    public BuildingResponse getBuildingMarker(@PathVariable("buildingId") Long buildingId) {
         return mapService.getBuildingMarker(buildingId);
     }
 
     @CrossOrigin("*")
     @GetMapping("/buildings")
-    public ListWrapperResponse<BuildingMarkerSimpleResponse> getBuildingMarkers(){
+    public ListWrapperResponse<BuildingSimpleResponse> getBuildingMarkers(){
         return ListWrapperResponse.of(mapService.getBuildingMarkers());
-    }
-
-    @PostMapping("/amenities")
-    public void addAmenityForBuilding(@RequestBody @Valid BuildingAmenityAddRequest request){
-        mapService.addAmenityForBuilding(request);
     }
 }

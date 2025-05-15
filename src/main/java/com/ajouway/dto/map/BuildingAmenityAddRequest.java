@@ -1,25 +1,21 @@
 package com.ajouway.dto.map;
 
 import com.ajouway.domain.enums.AmenityInfoType;
-import com.ajouway.infra.persistence.entity.map.AmenityInfo;
-import com.ajouway.infra.persistence.entity.map.BuildingMarker;
-import java.util.Map;
+import com.ajouway.storage.entity.map.AmenityInfo;
+import com.ajouway.storage.entity.map.Building;
 import lombok.Builder;
 import org.apache.logging.log4j.core.config.plugins.validation.constraints.NotBlank;
 
 @Builder
-public record BuildingAmenityAddRequest (
+public record BuildingAmenityAddRequest(
         @NotBlank
-        AmenityInfoType type,
+        AmenityInfoType amenityInfoType,
 
         @NotBlank
-        Map<String, Object> properties,
+        String contents
 
-        @NotBlank
-        Long buildingId
-
-){
-    public AmenityInfo toEntity(final BuildingMarker buildingMarker){
-        return AmenityInfo.create(type, properties, buildingMarker);
+) {
+    public AmenityInfo toEntity(final Building building) {
+        return AmenityInfo.create(amenityInfoType, contents, building);
     }
 }
