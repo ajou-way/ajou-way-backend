@@ -4,12 +4,12 @@ import com.ajouway.common.exception.CustomException;
 import com.ajouway.common.exception.CustomExceptionInfo;
 import com.ajouway.domain.repository.AmenityInfoRepository;
 import com.ajouway.domain.repository.BuildingRepository;
-import com.ajouway.dto.map.AmenityInfoResponse;
-import com.ajouway.dto.map.BuildingAmenityAddRequest;
-import com.ajouway.dto.map.BuildingSimpleResponse;
+import com.ajouway.dto.map.response.AmenityInfoResponse;
+import com.ajouway.dto.map.request.BuildingAmenityAddRequest;
+import com.ajouway.dto.map.response.BuildingSimpleResponse;
 import com.ajouway.storage.entity.map.AmenityInfo;
 import com.ajouway.storage.entity.map.Building;
-import com.ajouway.dto.map.BuildingResponse;
+import com.ajouway.dto.map.response.BuildingResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
