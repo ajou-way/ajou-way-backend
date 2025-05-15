@@ -1,4 +1,4 @@
-INSERT INTO building_marker (building_marker_id, name, geometry, remarks, img_url)
+INSERT INTO building (building_id, name, geometry, remarks, img_url)
 VALUES (1, '정문', ST_SetSRID(ST_MakePoint(127.0436415, 37.2800147), 4326), NULL, NULL),
        (2, '버스정류장', ST_SetSRID(ST_MakePoint(127.0463409, 37.2820187), 4326), NULL, NULL),
        (3, '선구자상', ST_SetSRID(ST_MakePoint(127.0435017, 37.2823326), 4326), NULL, NULL),

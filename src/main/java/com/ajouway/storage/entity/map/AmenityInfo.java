@@ -1,7 +1,6 @@
-package com.ajouway.infra.persistence.entity.map;
+package com.ajouway.storage.entity.map;
 
 import com.ajouway.domain.enums.AmenityInfoType;
-import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,12 +12,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
 @Entity
 @Getter
@@ -34,29 +31,33 @@ public class AmenityInfo {
     @Enumerated(EnumType.STRING)
     private AmenityInfoType amenityInfoType;
 
-    @Type(JsonType.class)
-    @Column(columnDefinition = "jsonb")
-    private Map<String, Object> properties;
+    @Column(nullable = false)
+    private String contents;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "building_makrer_id", nullable = false)
-    private BuildingMarker buildingMarker;
+    @JoinColumn(name = "building_id", nullable = false)
+    private Building building;
 
     @Builder
-    private AmenityInfo(final AmenityInfoType amenityInfoType, final Map<String, Object> properties,
-                        final BuildingMarker buildingMarker) {
+    private AmenityInfo(final AmenityInfoType amenityInfoType, final String contents,
+                        final Building building) {
         this.amenityInfoType = amenityInfoType;
-        this.properties = properties;
-        this.buildingMarker = buildingMarker;
+        this.contents = contents;
+        this.building = building;
     }
 
-    public static AmenityInfo create(final AmenityInfoType amenityInfoType, final Map<String, Object> properties,
-                                     final BuildingMarker buildingMarker) {
+    public static AmenityInfo create(final AmenityInfoType amenityInfoType, final String contents,
+                                     final Building building) {
         return AmenityInfo.builder()
                 .amenityInfoType(amenityInfoType)
-                .properties(properties)
-                .buildingMarker(buildingMarker)
+                .contents(contents)
+                .building(building)
                 .build();
+    }
+
+    public AmenityInfo update(final String contents){
+        this.contents = contents;
+        return this;
     }
 
 }
