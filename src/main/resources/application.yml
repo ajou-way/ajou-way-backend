@@ -18,3 +18,15 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY:1234AE567889012342I}
+      secret-key: ${AWS_SECRET_KEY:1234AE567889012342I37S1ABCDESECRETSECRET}
+    region:
+      static: ap-northeast-2  # 서울 리전
+    stack:
+      auto: false
+    s3:
+      bucket: ${AWS_S3_BUCKET_NAME:dummy-bucket}

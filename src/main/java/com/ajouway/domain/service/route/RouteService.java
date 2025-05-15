@@ -52,7 +52,7 @@ public class RouteService {
         }
 
         if (candidates.isEmpty()) {
-            throw new RuntimeException("경로를 찾을 수 없습니다.");
+            throw new CustomException(CustomExceptionInfo.ROUTE_ERROR);
         }
 
         return candidates.stream()
