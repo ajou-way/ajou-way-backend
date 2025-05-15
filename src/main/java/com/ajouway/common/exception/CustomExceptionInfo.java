@@ -19,6 +19,10 @@ public enum CustomExceptionInfo {
     BUILDING_NOT_FOUND(404, "builing not found", 404002),
     AMENITY_NOT_FOUND(404, "amenity not found", 404003),
 
+    //409
+    IMAGE_EXTENSION_NOT_SUPPORTED(409, "image extension not supported", 409001),
+    IMAGE_UPLOAD_FAIL(409, "image upload fail", 409002),
+
     //500
     ROUTE_ERROR(500, "route error", 500001);
 
