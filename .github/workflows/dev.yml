@@ -87,7 +87,7 @@ jobs:
             echo "SPRING_JPA_DDL_AUTO=${{ secrets.SPRING_JPA_DDL_AUTO }}" >> .env
             echo "POSTGRESQL_USER=admin" >> .env
             echo "POSTGRESQL_PASSWORD=${{ secrets.POSTGRESQL_PASSWORD }}" >> .env
-            echo "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/ajou_way" >> .env
+            echo "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/ajou_way" >> .env
             echo "SPRING_DATASOURCE_USERNAME=admin" >> .env
             echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.POSTGRESQL_PASSWORD }}" >> .env
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
