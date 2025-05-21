@@ -95,3 +95,17 @@ jobs:
             docker-compose down -v
             docker images -q ajouwaydev/ajouway-dev:latest | grep -q . && docker rmi ajouwaydev/ajouway-dev:latest
             docker-compose up -d
+
+
+  trigger-data-pipeline:
+    name: Trigger Data Pipeline
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger ajou-way-data workflow_dispatch
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PAT_FOR_TRIGGER }}" \
+            https://api.github.com/repos/ajou-way/ajou-way-data/dispatches \
+            -d '{"event_type":"trigger-from-backend"}'
