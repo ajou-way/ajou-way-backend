@@ -1,79 +1,99 @@
-//package com.ajouway.service.auth;
-//
-//import com.ajouway.common.exception.CustomException;
-//import com.ajouway.common.exception.CustomExceptionInfo;
-//import com.ajouway.common.security.jwt.JwtType;
-//import com.ajouway.common.security.jwt.JwtUtil;
-//import com.ajouway.common.security.jwt.RedisUtil;
-//import com.ajouway.domain.enums.ProviderType;
-//import com.ajouway.domain.persistence.entity.user.User;
-//import com.ajouway.domain.persistence.repository.UserRepository;
-//import com.ajouway.dto.auth.JwtResponse;
-//import com.ajouway.dto.auth.LoginRequest;
-//import java.util.Collections;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.stereotype.Service;
-//import org.springframework.transaction.annotation.Transactional;
-//
-//@Service
-//@Transactional(readOnly = true)
-//@RequiredArgsConstructor
-//public class AuthService {
-//
-//    private final UserRepository userRepository;
-//    private final PasswordEncoder passwordEncoder;
-//    private final JwtUtil jwtUtil;
-//    private final RedisUtil redisUtil;
-//
-//
-//    public User validateUserByPassword(final LoginRequest loginRequest) {
-//        User user = userRepository.findByLoginIdOrThrow(loginRequest.loginId());
-//        if (!passwordEncoder.matches(loginRequest.loginPw(), user.getPassword())) {
-//            throw new CustomException(CustomExceptionInfo.INVALID_PASSWORD);
-//        }
-//        return user;
-//    }
-//
-//    public JwtResponse generateTokenForLogin(final LoginRequest userLoginRequest) {
-//        User user = validateUserByPassword(userLoginRequest);
-//        return createJwtTokens(user);
-//    }
-//
-//    //refresh
-//    public JwtResponse generateTokenForReissue(final String refreshToken) {
-//        Long userId = jwtUtil.getUserIdFromToken(JwtType.REFRESH, refreshToken);
-//        User user = userRepository.findByIdOrThrow(userId);   //해당 user 존재 검증
-//
-//        redisUtil.validateRefreshToken(user.getEmail(), refreshToken);
-//        deleteExistingRefreshToken(user.getEmail());
-//        return createJwtTokens(user);
-//    }
-//
-//    public void deleteExistingRefreshToken(final String loginId) {
-//        redisUtil.deleteByKey(loginId);
-//    }
-//
-//    //private
-//    private JwtResponse createJwtTokens(final User user) {
-//        String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail(),
-//                Collections.singletonList(user.getRole()));
-//        String refreshToken = jwtUtil.createRefreshToken(user.getId());
-//        redisUtil.save(user.getEmail(), refreshToken);
-//        return JwtResponse.builder()
-//                .grantType(JwtUtil.BEARER_PREFIX)
-//                .accessToken(accessToken)
-//                .refreshToken(refreshToken)
-//                .build();
-//    }
-//
-//    //OAuth
-//    public String getOAuthRedirectUrl(final String provider) {
-//        if (provider.equalsIgnoreCase(ProviderType.GOOGLE)) {
-//            return "https://accounts.google.com/o/oauth2/v2/auth?...";
-//        } else if ("kakao".equalsIgnoreCase(provider)) {
-//            return "https://kauth.kakao.com/oauth/authorize?...";
-//        }
-//        throw new IllegalArgumentException("지원하지 않는 OAuth 제공자입니다.");
-//    }
-//}
+package com.ajouway.domain.service.auth;
+
+import com.ajouway.common.security.jwt.JwtUtil;
+import com.ajouway.domain.enums.AuthProvider;
+import com.ajouway.domain.enums.UserRole;
+import com.ajouway.dto.auth.GoogleUserInfoResponse;
+import com.ajouway.dto.auth.JwtResponse;
+import com.ajouway.dto.auth.SocialLoginRequest;
+import com.ajouway.dto.auth.UserProfileResponse;
+import com.ajouway.storage.entity.user.UserEntity;
+import com.ajouway.storage.repository.user.UserRepository;
+import java.util.List;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+
+@Slf4j
+@Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class AuthService {
+    private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
+
+    private static final RestTemplate restTemplate = new RestTemplate();
+
+    @Transactional
+    public JwtResponse registerUser(final SocialLoginRequest request) {
+        // 소셜 유저의 식별자 가져오기 (예: 구글 userId) ← 실제로는 OAuth 클라이언트를 통해 확인
+        AuthProvider provider = request.provider();
+        String accessToken = request.accessToken();
+
+        ResponseEntity<GoogleUserInfoResponse> response = restTemplate.exchange(
+                "https://www.googleapis.com/oauth2/v3/userinfo",
+                HttpMethod.GET,
+                new HttpEntity<>(createHeaders(accessToken)),
+                GoogleUserInfoResponse.class
+        );
+        GoogleUserInfoResponse userInfo = response.getBody();
+        if (userInfo == null || userInfo.sub() == null) {
+            throw new IllegalArgumentException("Invalid access token or user info not found");
+        }
+
+        // 기존 유저 있는지 확인
+        String providerId = userInfo.sub();
+        Optional<UserEntity> optionalUser = userRepository.findByAuthProviderAndProviderId(provider, providerId);
+
+        // 기존 유저가 있다면 JWT 토큰 생성 후 반환
+        if (optionalUser.isPresent()) {
+            UserEntity user = optionalUser.get();
+            String jwtAccessToken = jwtUtil.createAccessToken(user.getId(), List.of(UserRole.ROLE_SOCIAL));
+            log.info("[USER LOGIN] User already exists: {}", user.getEmail());
+            return JwtResponse.of(jwtAccessToken);
+        }
+
+        // 새로운 TEMP 유저 등록
+        UserEntity newUser = UserEntity.create(
+                userInfo.email(),
+                userInfo.name(),
+                provider,
+                providerId,
+                UserRole.ROLE_SOCIAL
+        );
+        userRepository.save(newUser);
+
+        String jwtAccessToken = jwtUtil.createAccessToken(newUser.getId(), List.of(UserRole.ROLE_SOCIAL));
+        log.info("[USER REGISTER] New user registered: {}", newUser.getEmail());
+        return JwtResponse.of(jwtAccessToken);
+    }
+
+    private HttpHeaders createHeaders(String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(accessToken);
+        return headers;
+    }
+
+    public void logout(String userId) {
+        // TODO : 로그아웃 로직 구현
+    }
+
+    public UserProfileResponse getUserProfile(Long userId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+
+        return UserProfileResponse.of(
+                user.getId(),
+                user.getRole(),
+                user.getName(),
+                user.getEmail()
+        );
+    }
+}
