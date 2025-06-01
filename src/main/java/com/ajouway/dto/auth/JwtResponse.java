@@ -1,12 +1,11 @@
-//package com.ajouway.dto.auth;
-//
-//import lombok.Builder;
-//
-//@Builder
-//public record JwtResponse(
-//        String grantType,
-//        String accessToken,
-//        String refreshToken
-//) {
-//
-//}
+package com.ajouway.dto.auth;
+
+
+
+public record JwtResponse(
+        String accessToken
+) {
+    public static JwtResponse of(final String accessToken) {
+        return new JwtResponse(accessToken);
+    }
+}

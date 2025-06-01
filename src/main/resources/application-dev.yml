@@ -29,6 +29,6 @@ spring:
 #              - email
 #              - profile
 
-#jwt:
-#  access-secret: asdasdsadwqewqeqwrwqfefafafasdsda
-#  refresh-secret: ejkjsshhmzsdasdsfewyfqebwufnadsaojls
+jwt:
+  access-secret: asdasdsadwqewqeqwrwqfefafafasdsda
+  refresh-secret: ejkjsshhmzsdasdsfewyfqebwufnadsaojls
