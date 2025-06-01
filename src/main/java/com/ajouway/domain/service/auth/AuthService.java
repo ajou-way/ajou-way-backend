@@ -6,6 +6,7 @@ import com.ajouway.domain.enums.UserRole;
 import com.ajouway.dto.auth.GoogleUserInfoResponse;
 import com.ajouway.dto.auth.JwtResponse;
 import com.ajouway.dto.auth.SocialLoginRequest;
+import com.ajouway.dto.auth.UserProfilePatchRequest;
 import com.ajouway.dto.auth.UserProfileResponse;
 import com.ajouway.storage.entity.user.UserEntity;
 import com.ajouway.storage.repository.user.UserRepository;
@@ -75,11 +76,6 @@ public class AuthService {
         return JwtResponse.of(jwtAccessToken);
     }
 
-    private HttpHeaders createHeaders(String accessToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-        return headers;
-    }
 
     public void logout(String userId) {
         // TODO : 로그아웃 로직 구현
@@ -95,5 +91,21 @@ public class AuthService {
                 user.getName(),
                 user.getEmail()
         );
+    }
+
+    @Transactional
+    public Long updateUserProfile(Long userId, UserProfilePatchRequest request) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+        user.completeRegistration(request.major(), request.studentId());
+        userRepository.save(user);
+        return user.getId();
+    }
+
+    // private
+    private HttpHeaders createHeaders(String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(accessToken);
+        return headers;
     }
 }

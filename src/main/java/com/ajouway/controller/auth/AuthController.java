@@ -4,10 +4,13 @@ import com.ajouway.common.security.jwt.CustomUserDetails;
 import com.ajouway.domain.service.auth.AuthService;
 import com.ajouway.dto.auth.JwtResponse;
 import com.ajouway.dto.auth.SocialLoginRequest;
+import com.ajouway.dto.auth.UserProfileIdResponse;
+import com.ajouway.dto.auth.UserProfilePatchRequest;
 import com.ajouway.dto.auth.UserProfileResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,5 +37,14 @@ public class AuthController {
     public UserProfileResponse getProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long userId = userDetails.getUserId();
         return authService.getUserProfile(userId);
+    }
+
+    @PatchMapping("/profile")
+    public UserProfileIdResponse updateProfile(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                               @RequestBody UserProfilePatchRequest request) {
+        Long userId = userDetails.getUserId();
+        request.validate();
+
+        return UserProfileIdResponse.of(authService.updateUserProfile(userId, request));
     }
 }

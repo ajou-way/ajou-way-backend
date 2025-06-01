@@ -42,14 +42,24 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+
+    @Column(name = "major")
+    private String major;
+
+    @Column(name = "student_id")
+    private String studentId;
+
     @Builder
-    public UserEntity(String email, AuthProvider authProvider, Long id, String name, String providerId, UserRole role) {
+    public UserEntity(String email, AuthProvider authProvider, Long id, String name, String providerId, UserRole role,
+                      String major, String studentId) {
         this.id = id;
         this.email = email;
         this.authProvider = authProvider;
         this.name = name;
         this.providerId = providerId;
         this.role = role;
+        this.major = major;
+        this.studentId = studentId;
     }
 
     public static UserEntity create(final String email, final String name, final AuthProvider authProvider,
@@ -62,5 +72,11 @@ public class UserEntity {
                 .name(name)
                 .role(role)
                 .build();
+    }
+
+    public void completeRegistration(String major, String studentId) {
+        this.major = major;
+        this.studentId = studentId;
+        this.role = UserRole.ROLE_USER;
     }
 }
