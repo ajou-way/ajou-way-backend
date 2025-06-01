@@ -19,3 +19,7 @@ spring:
   sql:
     init:
       mode: never
+
+jwt:
+  access-secret: asdasdsadwqewqeqwrwqfefafafasdsda
+  refresh-secret: ejkjsshhmzsdasdsfewyfqebwufnadsaojls
