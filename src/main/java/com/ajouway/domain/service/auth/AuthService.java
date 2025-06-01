@@ -56,7 +56,7 @@ public class AuthService {
         // 기존 유저가 있다면 JWT 토큰 생성 후 반환
         if (optionalUser.isPresent()) {
             UserEntity user = optionalUser.get();
-            String jwtAccessToken = jwtUtil.createAccessToken(user.getId(), List.of(UserRole.ROLE_SOCIAL));
+            String jwtAccessToken = jwtUtil.createAccessToken(user.getId(), List.of(UserRole.ROLE_USER));
             log.info("[USER LOGIN] User already exists: {}", user.getEmail());
             return JwtResponse.of(jwtAccessToken);
         }
