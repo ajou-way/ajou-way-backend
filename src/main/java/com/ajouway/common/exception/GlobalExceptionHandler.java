@@ -1,6 +1,8 @@
 package com.ajouway.common.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -29,5 +31,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(500)
                 .body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(JwtInvalidException.class)
+    public ResponseEntity<Object> handlerJwtInvalidException(JwtInvalidException ex){
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("errorCode", "INVALID_JWT");
+        errorResponse.put("errorMessage", ex.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
     }
 }

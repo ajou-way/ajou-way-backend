@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
@@ -40,11 +42,11 @@ public class SecurityConfig {
         http.httpBasic(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(authMangerRequestMatcher -> authMangerRequestMatcher
-//                .requestMatchers("/users/**").permitAll()
-                .requestMatchers("/api/maps/**").permitAll()
-                .requestMatchers("/api/auth/login").permitAll()
-                .requestMatchers(getSwaggerUIPath()).permitAll()
-                .anyRequest().authenticated());
+//                .requestMatchers("/api/maps/**").permitAll()
+//                .requestMatchers("/api/auth/login").permitAll()
+//                .requestMatchers(getSwaggerUIPath()).permitAll()
+//                .anyRequest().authenticated());
+        .anyRequest().permitAll());
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -30,5 +30,5 @@ spring:
 #              - profile
 
 jwt:
-  access-secret: asdasdsadwqewqeqwrwqfefafafasdsda
-  refresh-secret: ejkjsshhmzsdasdsfewyfqebwufnadsaojls
+  access-secret: ${JWT_ACCESS_SECRET}
+  refresh-secret: ${JWT_ACCESS_SECRET}

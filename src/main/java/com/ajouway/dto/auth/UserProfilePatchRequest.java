@@ -1,7 +1,12 @@
 package com.ajouway.dto.auth;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record UserProfilePatchRequest(
+        @NotBlank
         String major,
+
+        @NotBlank
         String studentId
 ) {
     public void validate() {
