@@ -1,26 +1,30 @@
 package com.ajouway.common.security.jwt;
 
 import io.jsonwebtoken.Claims;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class CustomUserDetails implements UserDetails {
-    @Getter
-    private final Long userId;
-    private final Collection<? extends GrantedAuthority> roles;
+import java.util.Collection;
+import java.util.List;
 
-    public CustomUserDetails(final Claims claims) {
-        this.userId = Long.valueOf((Integer) claims.get(JwtUtil.CLAIM_USER_ID));
-        this.roles = createGrantedAuthorities((List<String>) claims.get(JwtUtil.CLAIM_ROLES));
+@Getter
+public class CustomUserDetails implements UserDetails {
+    private final Long userId;
+    private final String role;
+    private final Collection<? extends GrantedAuthority> authorities;
+
+    public CustomUserDetails(Claims claims) {
+        Number id = (Number) claims.get(JwtUtil.CLAIM_USER_ID);
+        this.userId = id.longValue();
+        this.role = (String) claims.get(JwtUtil.CLAIM_ROLE);
+        this.authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role));
     }
 
     @Override
@@ -31,13 +35,5 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return null;
-    }
-
-    private Collection<? extends GrantedAuthority> createGrantedAuthorities(final List<String> roles) {
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        for (String role : roles) {
-            grantedAuthorities.add(() -> role);
-        }
-        return grantedAuthorities;
     }
 }
