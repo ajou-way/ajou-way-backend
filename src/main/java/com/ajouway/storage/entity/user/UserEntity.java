@@ -42,7 +42,6 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-
     @Column(name = "major")
     private String major;
 

@@ -1,5 +1,5 @@
 package com.ajouway.domain.enums;
 
-public enum FacilityMarkerType {
+public enum FacilityType {
     ELEVATOR, IMPAIRMENT_TOILET, RAMP, NOTE, AUDIO_DEVICE, SUPPORT_OFFICE;
 }

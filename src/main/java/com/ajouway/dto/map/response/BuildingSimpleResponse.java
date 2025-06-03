@@ -2,8 +2,8 @@ package com.ajouway.dto.map.response;
 
 import com.ajouway.domain.enums.AmenityInfoType;
 import com.ajouway.dto.GeoJsonPoint;
-import com.ajouway.storage.entity.map.AmenityInfo;
-import com.ajouway.storage.entity.map.Building;
+import com.ajouway.storage.entity.map.AmenityInfoEntity;
+import com.ajouway.storage.entity.map.BuildingEntity;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
@@ -17,7 +17,7 @@ public record BuildingSimpleResponse(
         String imgUrl,
         List<AmenityInfoType> amenityInfoTypes
 ) {
-    public static BuildingSimpleResponse fromEntity(final Building building) {
+    public static BuildingSimpleResponse fromEntity(final BuildingEntity building) {
         return BuildingSimpleResponse.builder()
                 .id(building.getId())
                 .name(building.getName())
@@ -26,7 +26,7 @@ public record BuildingSimpleResponse(
                 .imgUrl(building.getImgUrl())
                 .amenityInfoTypes(building.getAmenityInfos()
                         .stream()
-                        .map(AmenityInfo::getAmenityInfoType)
+                        .map(AmenityInfoEntity::getAmenityInfoType)
                         .collect(Collectors.toList()))
                 .build();
     }
