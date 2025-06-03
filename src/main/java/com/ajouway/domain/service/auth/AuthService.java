@@ -3,14 +3,15 @@ package com.ajouway.domain.service.auth;
 import com.ajouway.common.security.jwt.JwtUtil;
 import com.ajouway.domain.enums.AuthProvider;
 import com.ajouway.domain.enums.UserRole;
+import com.ajouway.domain.repository.UserRepository;
 import com.ajouway.dto.auth.GoogleUserInfoResponse;
 import com.ajouway.dto.auth.JwtResponse;
+import com.ajouway.dto.auth.SignUpResponse;
 import com.ajouway.dto.auth.SocialLoginRequest;
-import com.ajouway.dto.auth.UserProfilePatchRequest;
-import com.ajouway.dto.auth.UserProfileResponse;
+import com.ajouway.dto.user.UserProfilePatchRequest;
 import com.ajouway.storage.entity.user.UserEntity;
-import com.ajouway.storage.repository.user.UserRepository;
-import java.util.List;
+import com.ajouway.storage.repository.user.UserJpaRepository;
+
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,25 +82,11 @@ public class AuthService {
         // TODO : 로그아웃 로직 구현
     }
 
-    public UserProfileResponse getUserProfile(Long userId) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
-
-        return UserProfileResponse.of(
-                user.getId(),
-                user.getRole(),
-                user.getName(),
-                user.getEmail()
-        );
-    }
-
-    @Transactional
-    public Long updateUserProfile(Long userId, UserProfilePatchRequest request) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+    public SignUpResponse signUp(Long userId, UserProfilePatchRequest request) {
+        UserEntity user = userRepository.getById(userId);
         user.completeRegistration(request.major(), request.studentId());
         userRepository.save(user);
-        return user.getId();
+        return SignUpResponse.of(user.getId(),jwtUtil.generateAccessToken(user.getId(), user.getRole()));
     }
 
     // private
