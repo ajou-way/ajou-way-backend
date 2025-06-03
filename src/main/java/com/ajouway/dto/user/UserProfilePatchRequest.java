@@ -1,4 +1,4 @@
-package com.ajouway.dto.auth;
+package com.ajouway.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 
