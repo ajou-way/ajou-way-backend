@@ -37,7 +37,7 @@ public class AuthService {
         // 소셜 유저의 식별자 가져오기 (예: 구글 userId) ← 실제로는 OAuth 클라이언트를 통해 확인
         AuthProvider provider = request.provider();
         String accessToken = request.accessToken();
-
+        System.out.println("Access Token: " + accessToken);
         ResponseEntity<GoogleUserInfoResponse> response = restTemplate.exchange(
                 "https://www.googleapis.com/oauth2/v3/userinfo",
                 HttpMethod.GET,
@@ -56,7 +56,7 @@ public class AuthService {
         // 기존 유저가 있다면 JWT 토큰 생성 후 반환
         if (optionalUser.isPresent()) {
             UserEntity user = optionalUser.get();
-            String jwtAccessToken = jwtUtil.createAccessToken(user.getId(), List.of(UserRole.ROLE_USER));
+            String jwtAccessToken = jwtUtil.generateAccessToken(user.getId(), UserRole.USER);
             log.info("[USER LOGIN] User already exists: {}", user.getEmail());
             return JwtResponse.of(jwtAccessToken);
         }
@@ -67,11 +67,11 @@ public class AuthService {
                 userInfo.name(),
                 provider,
                 providerId,
-                UserRole.ROLE_SOCIAL
+                UserRole.SOCIAL
         );
         userRepository.save(newUser);
 
-        String jwtAccessToken = jwtUtil.createAccessToken(newUser.getId(), List.of(UserRole.ROLE_SOCIAL));
+        String jwtAccessToken = jwtUtil.generateAccessToken(newUser.getId(), UserRole.SOCIAL);
         log.info("[USER REGISTER] New user registered: {}", newUser.getEmail());
         return JwtResponse.of(jwtAccessToken);
     }

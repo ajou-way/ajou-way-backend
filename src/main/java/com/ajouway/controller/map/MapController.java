@@ -18,12 +18,12 @@ public class MapController {
     private final MapService mapService;
     private final FacilityService facilityService;
 
-    @GetMapping
+    @GetMapping("/facilities")
     public ListWrapperResponse<FacilityResponse> getFacilityMarkers() {
         return ListWrapperResponse.of(facilityService.getFacilityMarkers());
     }
 
-    @GetMapping("/type")
+    @GetMapping("/facilities/type")
     public ListWrapperResponse<FacilityResponse> getFacilityMarkersForType(@RequestParam("facilityMarkerType") FacilityType facilityMarkerType) {
         return ListWrapperResponse.of(facilityService.getFacilityMarkersForType(facilityMarkerType));
     }
