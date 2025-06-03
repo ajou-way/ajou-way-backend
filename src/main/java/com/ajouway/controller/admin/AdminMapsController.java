@@ -5,12 +5,13 @@ import com.ajouway.dto.map.response.AmenityInfoResponse;
 import com.ajouway.dto.map.request.BuildingAmenityAddRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/maps")
-// todo @PreAuthorize("hasRole('STAFF')")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminMapsController {
     private final MapService mapService;
 

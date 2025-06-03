@@ -73,9 +73,9 @@ public class UserEntity {
                 .build();
     }
 
-    public void completeRegistration(String major, String studentId) {
+    public void completeRegistration(final String major, final String studentId) {
         this.major = major;
         this.studentId = studentId;
-        this.role = UserRole.ROLE_USER;
+        this.role = UserRole.USER;
     }
 }

@@ -1,13 +1,19 @@
 package com.ajouway.common.security.jwt;
 
+import com.ajouway.common.exception.JwtInvalidException;
 import com.ajouway.domain.enums.UserRole;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import java.util.Base64;
+
 import java.util.Date;
 import java.util.List;
 import javax.crypto.SecretKey;
+
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +23,7 @@ public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String REFRESH_TOKEN_HEADER = "X-Refresh-Token";
 
-    public static final String CLAIM_ROLES = "roles";
+    public static final String CLAIM_ROLE = "role";
     public static final String CLAIM_USER_ID = "userId";
 
     // 나중에 환경변수 설정?
@@ -29,14 +35,14 @@ public class JwtUtil {
 
     public JwtUtil(@Value("${jwt.access-secret}") String accessSecretKey,
                    @Value("${jwt.refresh-secret}") String refreshSecretKey) {
-        this.accessSecret = Keys.hmacShaKeyFor(accessSecretKey.getBytes());
-        this.refreshSecret = Keys.hmacShaKeyFor(refreshSecretKey.getBytes());
+        this.accessSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(accessSecretKey));
+        this.refreshSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(refreshSecretKey));
     }
 
-    public String createAccessToken(final Long userId, final List<UserRole> roles) {
+    public String generateAccessToken(final Long userId, final UserRole role) {
         return Jwts.builder()
                 .claim(CLAIM_USER_ID, userId)
-                .claim(CLAIM_ROLES, roles)
+                .claim(CLAIM_ROLE, role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + ACCESS_DURATION))
                 .signWith(accessSecret)
@@ -53,17 +59,23 @@ public class JwtUtil {
 //    }
 
     public Claims parseClaimsFromToken(final JwtType jwtType, final String token) {
-        SecretKey secretForSign = jwtType == JwtType.ACCESS ? accessSecret : refreshSecret;
+        Claims claims = null;
         try {
-            return Jwts.parser()
-                    .verifyWith(secretForSign)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
-        } catch (Exception e) {
-            throw new RuntimeException("Invalid JWT token: " + e.getMessage());
+            if (jwtType.equals(JwtType.ACCESS)) {
+                claims = Jwts.parser().verifyWith(accessSecret).build().parseSignedClaims(token).getPayload();
+            } else if (jwtType.equals(JwtType.REFRESH)) {
+                claims = Jwts.parser().verifyWith(refreshSecret).build().parseSignedClaims(token).getPayload();
+            }
+            return claims;
+        } catch (SignatureException signatureException) {
+            throw new JwtInvalidException("signature key is different");
+        } catch (ExpiredJwtException expiredJwtException) {
+            throw new JwtInvalidException("expired token");
+        } catch (MalformedJwtException malformedJwtException) {
+            throw new JwtInvalidException("malformed token");
+        } catch (IllegalArgumentException illegalArgumentException) {
+            throw new JwtInvalidException("using illegal argument like null");
         }
-
     }
 
     public Long getUserIdFromToken(final JwtType jwtType, final String token) {
