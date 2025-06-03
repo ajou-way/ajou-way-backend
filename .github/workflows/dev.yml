@@ -91,6 +91,7 @@ jobs:
             echo "SPRING_DATASOURCE_USERNAME=admin" >> .env
             echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.POSTGRESQL_PASSWORD }}" >> .env
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
+            echo "JWT_ACCESS_SECRET=${{ secrets.JWT_ACCESS_SECRET }}" >> .env
             echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             docker-compose down -v
             docker images -q ajouwaydev/ajouway-dev:latest | grep -q . && docker rmi ajouwaydev/ajouway-dev:latest

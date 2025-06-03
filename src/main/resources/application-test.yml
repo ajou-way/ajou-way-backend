@@ -21,5 +21,5 @@ spring:
       mode: never
 
 jwt:
-  access-secret: asdasdsadwqewqeqwrwqfefafafasdsda
-  refresh-secret: ejkjsshhmzsdasdsfewyfqebwufnadsaojls
+  access-secret: ${JWT_ACCESS_SECRET:jwtsecretkeydefaultfortestasdasdasdsadsadsa}
+  refresh-secret: ${JWT_ACCESS_SECRET:jwtsecretkeydefaultfortestasdasdasdsadsadsa}
