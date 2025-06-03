@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "amenity_info")
-public class AmenityInfo {
+public class AmenityInfoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "amenity_info_id")
@@ -36,26 +36,26 @@ public class AmenityInfo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "building_id", nullable = false)
-    private Building building;
+    private BuildingEntity building;
 
     @Builder
-    private AmenityInfo(final AmenityInfoType amenityInfoType, final String contents,
-                        final Building building) {
+    private AmenityInfoEntity(final AmenityInfoType amenityInfoType, final String contents,
+                              final BuildingEntity building) {
         this.amenityInfoType = amenityInfoType;
         this.contents = contents;
         this.building = building;
     }
 
-    public static AmenityInfo create(final AmenityInfoType amenityInfoType, final String contents,
-                                     final Building building) {
-        return AmenityInfo.builder()
+    public static AmenityInfoEntity create(final AmenityInfoType amenityInfoType, final String contents,
+                                           final BuildingEntity building) {
+        return AmenityInfoEntity.builder()
                 .amenityInfoType(amenityInfoType)
                 .contents(contents)
                 .building(building)
                 .build();
     }
 
-    public AmenityInfo update(final String contents){
+    public AmenityInfoEntity update(final String contents){
         this.contents = contents;
         return this;
     }
