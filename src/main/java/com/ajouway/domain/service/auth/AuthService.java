@@ -82,6 +82,7 @@ public class AuthService {
         // TODO : 로그아웃 로직 구현
     }
 
+    @Transactional
     public SignUpResponse signUp(Long userId, UserProfilePatchRequest request) {
         UserEntity user = userRepository.getById(userId);
         user.completeRegistration(request.major(), request.studentId());
