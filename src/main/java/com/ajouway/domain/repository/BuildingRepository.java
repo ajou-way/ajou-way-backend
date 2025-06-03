@@ -1,11 +1,11 @@
 package com.ajouway.domain.repository;
 
-import com.ajouway.storage.entity.map.Building;
+import com.ajouway.storage.entity.map.BuildingEntity;
 
 import java.util.List;
 
 public interface BuildingRepository {
-    Building getById(Long id);
+    BuildingEntity getById(Long id);
 
-    List<Building> findAll();
+    List<BuildingEntity> findAll();
 }

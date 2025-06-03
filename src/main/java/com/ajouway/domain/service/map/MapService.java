@@ -7,8 +7,8 @@ import com.ajouway.domain.repository.BuildingRepository;
 import com.ajouway.dto.map.response.AmenityInfoResponse;
 import com.ajouway.dto.map.request.BuildingAmenityAddRequest;
 import com.ajouway.dto.map.response.BuildingSimpleResponse;
-import com.ajouway.storage.entity.map.AmenityInfo;
-import com.ajouway.storage.entity.map.Building;
+import com.ajouway.storage.entity.map.AmenityInfoEntity;
+import com.ajouway.storage.entity.map.BuildingEntity;
 import com.ajouway.dto.map.response.BuildingResponse;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class MapService {
     private final AmenityInfoRepository amenityInfoRepository;
 
     public BuildingResponse getBuildingMarker(final Long buildingId) {
-        Building buildingMarker = buildingRepository.getById(buildingId);
+        BuildingEntity buildingMarker = buildingRepository.getById(buildingId);
         return BuildingResponse.fromEntity(buildingMarker);
     }
 
@@ -43,14 +43,14 @@ public class MapService {
         if (amenityInfoRepository.existsByBuildingIdAndAmenityInfoType(buildingId, request.amenityInfoType())) {
             throw new CustomException(CustomExceptionInfo.ALREADY_EXIST_AMENITY_INFO_TYPE);
         }
-        Building buildingMarker = buildingRepository.getById(buildingId);
-        AmenityInfo amenityInfo = amenityInfoRepository.save(request.toEntity(buildingMarker));
+        BuildingEntity buildingMarker = buildingRepository.getById(buildingId);
+        AmenityInfoEntity amenityInfo = amenityInfoRepository.save(request.toEntity(buildingMarker));
         return AmenityInfoResponse.fromEntity(amenityInfo);
     }
 
     @Transactional
     public AmenityInfoResponse updateAmenityForBuilding(final Long amenityId, final BuildingAmenityAddRequest request) {
-        AmenityInfo amenityInfo = amenityInfoRepository.getById(amenityId);
+        AmenityInfoEntity amenityInfo = amenityInfoRepository.getById(amenityId);
         return AmenityInfoResponse.fromEntity(amenityInfo.update(request.contents()));
     }
 }

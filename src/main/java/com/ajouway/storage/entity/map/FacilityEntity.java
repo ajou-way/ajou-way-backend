@@ -1,9 +1,7 @@
 package com.ajouway.storage.entity.map;
 
+import com.ajouway.domain.enums.FacilityType;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,15 +10,16 @@ import org.locationtech.jts.geom.Point;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "building")
-public class Building {
+@Table(name = "facility")
+public class FacilityEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="building_id")
+    @Column(name="facility_id")
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private FacilityType facilityType;
 
     @Column(columnDefinition = "geometry(Point, 4326)", nullable = false)
     private Point geometry;
@@ -30,10 +29,9 @@ public class Building {
     @Column(name = "img_url")
     private String imgUrl;
 
-//  todo 배리어프리
-//    @OneToMany(mappedBy = "buildingMarker", cascade = CascadeType.REMOVE, orphanRemoval = true)
-//    private final List<FacilityMarker> facilityMarkers = new ArrayList<>();
+    private String locationInform;
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
-    private final List<AmenityInfo> amenityInfos = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "building_id")
+    private BuildingEntity building;
 }

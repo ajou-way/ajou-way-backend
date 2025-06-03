@@ -1,12 +1,12 @@
 package com.ajouway.domain.repository;
 
 import com.ajouway.domain.enums.AmenityInfoType;
-import com.ajouway.storage.entity.map.AmenityInfo;
+import com.ajouway.storage.entity.map.AmenityInfoEntity;
 
 public interface AmenityInfoRepository {
-    AmenityInfo save(AmenityInfo amenityInfo);
+    AmenityInfoEntity save(AmenityInfoEntity amenityInfo);
 
-    AmenityInfo getById(Long amenityId);
+    AmenityInfoEntity getById(Long amenityId);
 
     boolean existsByBuildingIdAndAmenityInfoType(Long buildingId, AmenityInfoType amenityInfoType);
 }

@@ -1,8 +1,8 @@
 package com.ajouway.dto.map.request;
 
 import com.ajouway.domain.enums.AmenityInfoType;
-import com.ajouway.storage.entity.map.AmenityInfo;
-import com.ajouway.storage.entity.map.Building;
+import com.ajouway.storage.entity.map.AmenityInfoEntity;
+import com.ajouway.storage.entity.map.BuildingEntity;
 import lombok.Builder;
 import org.apache.logging.log4j.core.config.plugins.validation.constraints.NotBlank;
 
@@ -15,7 +15,7 @@ public record BuildingAmenityAddRequest(
         String contents
 
 ) {
-    public AmenityInfo toEntity(final Building building) {
-        return AmenityInfo.create(amenityInfoType, contents, building);
+    public AmenityInfoEntity toEntity(final BuildingEntity building) {
+        return AmenityInfoEntity.create(amenityInfoType, contents, building);
     }
 }

@@ -41,7 +41,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authMangerRequestMatcher -> authMangerRequestMatcher
 //                .requestMatchers("/users/**").permitAll()
-                .requestMatchers("/api/markers/**").permitAll()
+                .requestMatchers("/api/maps/**").permitAll()
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers(getSwaggerUIPath()).permitAll()
                 .anyRequest().authenticated());

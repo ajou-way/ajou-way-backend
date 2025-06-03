@@ -1,6 +1,6 @@
 package com.ajouway.dto.map.response;
 
-import com.ajouway.storage.entity.map.Building;
+import com.ajouway.storage.entity.map.BuildingEntity;
 import com.ajouway.dto.GeoJsonPoint;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +15,7 @@ public record BuildingResponse(
         String imgUrl,
         List<AmenityInfoResponse> amenityInfos
 ){
-    public static BuildingResponse fromEntity(final Building building){
+    public static BuildingResponse fromEntity(final BuildingEntity building){
         return BuildingResponse.builder()
                 .id(building.getId())
                 .name(building.getName())
