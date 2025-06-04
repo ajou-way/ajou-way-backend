@@ -1,12 +1,9 @@
 package com.ajouway.domain.service.user;
 
-import com.ajouway.common.exception.CustomException;
-import com.ajouway.common.exception.CustomExceptionInfo;
 import com.ajouway.domain.repository.UserRepository;
 import com.ajouway.dto.user.UserProfilePatchRequest;
 import com.ajouway.dto.user.UserProfileResponse;
 import com.ajouway.storage.entity.user.UserEntity;
-import com.ajouway.storage.repository.user.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package com.ajouway.domain.service.map;
 
 import com.ajouway.domain.enums.FacilityType;
 import com.ajouway.domain.repository.FacilityRepository;
-import com.ajouway.dto.map.FacilityResponse;
+import com.ajouway.dto.map.response.FacilityResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
