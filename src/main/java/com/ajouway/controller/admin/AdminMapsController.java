@@ -1,10 +1,12 @@
 package com.ajouway.controller.admin;
 
 import com.ajouway.common.security.jwt.CustomUserDetails;
+import com.ajouway.domain.service.admin.AdminMarkerService;
 import com.ajouway.domain.service.map.MapService;
+import com.ajouway.dto.admin.request.AdminMarkerRequest;
 import com.ajouway.dto.admin.response.AdminMarkerResponse;
-import com.ajouway.dto.map.response.AmenityInfoResponse;
 import com.ajouway.dto.map.request.BuildingAmenityAddRequest;
+import com.ajouway.dto.map.response.AmenityInfoResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminMapsController {
     private final MapService mapService;
+    private final AdminMarkerService adminMarkerService;
 
     @PostMapping("/buildings/{buildingId}/amenity")
     public AmenityInfoResponse addAmenityForBuilding(@AuthenticationPrincipal CustomUserDetails userDetails,
@@ -31,9 +34,15 @@ public class AdminMapsController {
         return mapService.updateAmenityForBuilding(amenityId, request);
     }
 
-//    @PostMapping("/marker")
-//    public AdminMarkerResponse addMarker(@AuthenticationPrincipal CustomUserDetails userDetails,
-//                                         @RequestBody @Valid AdminMarkerResponse request) {
-//        return mapService.addMarker(request);
-//    }
+    @PostMapping("/markers")
+    public AdminMarkerResponse addMarker(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                         @RequestBody @Valid AdminMarkerRequest request) {
+        return adminMarkerService.addMarker(request);
+    }
+
+    @DeleteMapping("/markers/{markerId}")
+    public void deleteMarker(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                         @PathVariable Long markerId) {
+        adminMarkerService.deleteMarker(markerId);
+    }
 }
