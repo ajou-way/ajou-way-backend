@@ -4,10 +4,12 @@ import com.ajouway.common.security.jwt.CustomUserDetails;
 import com.ajouway.domain.service.admin.AdminMarkerService;
 import com.ajouway.domain.service.map.MapService;
 import com.ajouway.dto.admin.request.AdminMarkerRequest;
+import com.ajouway.dto.admin.request.AdminMarkerUpdateRequest;
 import com.ajouway.dto.admin.response.AdminMarkerResponse;
 import com.ajouway.dto.map.request.BuildingAmenityAddRequest;
 import com.ajouway.dto.map.response.AmenityInfoResponse;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,5 +46,12 @@ public class AdminMapsController {
     public void deleteMarker(@AuthenticationPrincipal CustomUserDetails userDetails,
                                          @PathVariable Long markerId) {
         adminMarkerService.deleteMarker(markerId);
+    }
+
+    @PutMapping("/markers/{markerId}")
+    public AdminMarkerResponse updateMarker(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                            @PathVariable Long markerId,
+                                            @RequestBody @Valid AdminMarkerUpdateRequest request) {
+        return adminMarkerService.updateMarker(markerId, request);
     }
 }

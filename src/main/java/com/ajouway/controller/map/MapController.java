@@ -1,9 +1,11 @@
 package com.ajouway.controller.map;
 
+import com.ajouway.common.security.jwt.JwtUtil;
 import com.ajouway.domain.enums.FacilityType;
 import com.ajouway.domain.service.map.FacilityService;
 import com.ajouway.dto.ListWrapperResponse;
-import com.ajouway.dto.map.FacilityResponse;
+import com.ajouway.dto.admin.response.AdminMarkerResponse;
+import com.ajouway.dto.map.response.FacilityResponse;
 import com.ajouway.dto.map.response.BuildingResponse;
 import com.ajouway.domain.service.map.MapService;
 import com.ajouway.dto.map.response.BuildingSimpleResponse;
@@ -36,5 +38,10 @@ public class MapController {
     @GetMapping("/buildings")
     public ListWrapperResponse<BuildingSimpleResponse> getBuildingMarkers() {
         return ListWrapperResponse.of(mapService.getBuildingMarkers());
+    }
+
+    @GetMapping("/markers")
+    public ListWrapperResponse<AdminMarkerResponse> getAdminMarkers() {
+        return ListWrapperResponse.of(mapService.getAdminMarkers());
     }
 }
