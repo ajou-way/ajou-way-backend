@@ -21,4 +21,9 @@ public class AdminMarkerService {
         adminMarkerRepository.save(adminMarkerEntity);
         return AdminMarkerResponse.fromEntity(adminMarkerEntity);
     }
+
+    @Transactional
+    public void deleteMarker(final Long markerId) {
+        adminMarkerRepository.deleteById(markerId);
+    }
 }
