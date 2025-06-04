@@ -39,4 +39,10 @@ public class AdminMapsController {
                                          @RequestBody @Valid AdminMarkerRequest request) {
         return adminMarkerService.addMarker(request);
     }
+
+    @DeleteMapping("/markers/{markerId}")
+    public void deleteMarker(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                         @PathVariable Long markerId) {
+        adminMarkerService.deleteMarker(markerId);
+    }
 }

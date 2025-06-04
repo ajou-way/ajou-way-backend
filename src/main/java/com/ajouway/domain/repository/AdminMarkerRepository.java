@@ -4,4 +4,6 @@ import com.ajouway.storage.entity.map.AdminMarkerEntity;
 
 public interface AdminMarkerRepository {
     AdminMarkerEntity save(AdminMarkerEntity adminMarkerEntity);
+
+    void deleteById(Long id);
 }
