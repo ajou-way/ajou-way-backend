@@ -15,4 +15,9 @@ public class AdminMarkerRepositoryImpl implements AdminMarkerRepository {
     public AdminMarkerEntity save(AdminMarkerEntity adminMarkerEntity) {
         return adminMarkerJpaRepository.save(adminMarkerEntity);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        adminMarkerJpaRepository.deleteById(id);
+    }
 }
