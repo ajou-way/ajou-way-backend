@@ -18,6 +18,7 @@ public enum CustomExceptionInfo {
     NOT_FOUND_USER(404, "user not found", 404001),
     BUILDING_NOT_FOUND(404, "builing not found", 404002),
     AMENITY_NOT_FOUND(404, "amenity not found", 404003),
+    NOT_FOUND_MARKER(404, "marker not found", 404004),
 
     //409
     IMAGE_EXTENSION_NOT_SUPPORTED(409, "image extension not supported", 409001),

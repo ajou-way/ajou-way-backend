@@ -2,9 +2,9 @@ package com.ajouway.domain.service.map;
 
 import com.ajouway.common.exception.CustomException;
 import com.ajouway.common.exception.CustomExceptionInfo;
+import com.ajouway.domain.repository.AdminMarkerRepository;
 import com.ajouway.domain.repository.AmenityInfoRepository;
 import com.ajouway.domain.repository.BuildingRepository;
-import com.ajouway.dto.admin.request.AdminMarkerRequest;
 import com.ajouway.dto.admin.response.AdminMarkerResponse;
 import com.ajouway.dto.map.request.BuildingAmenityAddRequest;
 import com.ajouway.dto.map.response.AmenityInfoResponse;
@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,8 @@ import java.util.stream.Collectors;
 public class MapService {
     private final BuildingRepository buildingRepository;
     private final AmenityInfoRepository amenityInfoRepository;
+    private final AdminMarkerRepository adminMarkerRepository;
+    private final Clock clock;
 
     public BuildingResponse getBuildingMarker(final Long buildingId) {
         BuildingEntity buildingMarker = buildingRepository.getById(buildingId);
@@ -53,5 +57,13 @@ public class MapService {
     public AmenityInfoResponse updateAmenityForBuilding(final Long amenityId, final BuildingAmenityAddRequest request) {
         AmenityInfoEntity amenityInfo = amenityInfoRepository.getById(amenityId);
         return AmenityInfoResponse.fromEntity(amenityInfo.update(request.contents()));
+    }
+
+    public List<AdminMarkerResponse> getAdminMarkers() {
+        LocalDateTime now = LocalDateTime.now(clock);
+        List<AdminMarkerEntity> adminMarkers = adminMarkerRepository.findAllByDeadlineAfter(now);
+        return adminMarkers.stream()
+                .map(AdminMarkerResponse::fromEntity)
+                .toList();
     }
 }
