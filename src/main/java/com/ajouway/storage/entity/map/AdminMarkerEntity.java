@@ -1,5 +1,6 @@
 package com.ajouway.storage.entity.map;
 
+import com.ajouway.dto.admin.request.AdminMarkerRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -66,5 +67,16 @@ public class AdminMarkerEntity {
                 .majorJson(majorJson)
                 .deadline(deadline)
                 .build();
+    }
+
+    public AdminMarkerEntity update(final String title,
+                                    final String contents,
+                                    final String majorJson,
+                                    final LocalDateTime deadline) {
+        this.title = title;
+        this.contents = contents;
+        this.majorJson = majorJson;
+        this.deadline = deadline;
+        return this;
     }
 }
