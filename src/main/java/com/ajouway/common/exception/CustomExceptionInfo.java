@@ -24,7 +24,8 @@ public enum CustomExceptionInfo {
     IMAGE_UPLOAD_FAIL(409, "image upload fail", 409002),
 
     //500
-    ROUTE_ERROR(500, "route error", 500001);
+    ROUTE_ERROR(500, "route error", 500001),
+    JSON_CONVERT_FAILED(500, "JSON 문자열 변환에 실패했습니다.", 500002);
 
     private final int statusCode;
     private final String message;

@@ -1,4 +1,4 @@
-package com.ajouway.dto.map;
+package com.ajouway.dto.map.response;
 
 import com.ajouway.domain.enums.FacilityType;
 import com.ajouway.dto.GeoJsonPoint;
