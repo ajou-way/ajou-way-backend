@@ -25,7 +25,7 @@ public class AdminMarkerEntity {
     @Size(min = 2, max = 20)
     private String title;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "text", nullable = false)
     private String contents;
 
     @Column(nullable = false)
