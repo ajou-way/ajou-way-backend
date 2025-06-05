@@ -9,7 +9,6 @@ import com.ajouway.dto.admin.response.AdminMarkerResponse;
 import com.ajouway.dto.map.request.BuildingAmenityAddRequest;
 import com.ajouway.dto.map.response.AmenityInfoResponse;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
