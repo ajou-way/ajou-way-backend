@@ -31,7 +31,7 @@ public class AmenityInfoEntity {
     @Enumerated(EnumType.STRING)
     private AmenityInfoType amenityInfoType;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "text", nullable = false)
     private String contents;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -55,7 +55,7 @@ public class AmenityInfoEntity {
                 .build();
     }
 
-    public AmenityInfoEntity update(final String contents){
+    public AmenityInfoEntity update(final String contents) {
         this.contents = contents;
         return this;
     }
